@@ -24,6 +24,8 @@ const profileAddButton = document.querySelector('.profile__add-button')
 
 profileEditButton.addEventListener('click', function () {
     openPopup(document.querySelector('.popup_type_edit'))
+    formEditingElements.name.value = editProfileName.textContent;
+    formEditingElements.description.value = editProfileDescription.textContent;
 })
 
 profileAddButton.addEventListener('click', function () {
@@ -52,8 +54,6 @@ const formEditProfile = document.forms.editProfile;
 const formEditingElements = formEditProfile.elements;
 const editProfileName = document.querySelector('.profile__title');
 const editProfileDescription = document.querySelector('.profile__description');
-formEditingElements.name.value = editProfileName.textContent;
-formEditingElements.description.value = editProfileDescription.textContent;
 
 formEditProfile.addEventListener('submit', function (evt) {
     evt.preventDefault();
