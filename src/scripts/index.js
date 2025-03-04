@@ -38,7 +38,7 @@ const popupNewAvatar = document.querySelector('.popup_type_new-avatar');
 //функция для открытия попапа редоктирования профиля на карандаш 
 profileEditButton.addEventListener('click', function () {
     popupEdit.querySelector('.popup__form').reset();
-    clearValidation(popupEdit)
+    clearValidation(popupEdit, validationConfig)
     openPopup(popupEdit)
     formEditingElements.name.value = editProfileName.textContent;
     formEditingElements.description.value = editProfileDescription.textContent;
@@ -48,20 +48,19 @@ profileEditButton.addEventListener('click', function () {
 //функция для открытие попапа для добавления новой картинки на +
 profileAddButton.addEventListener('click', function () {
     popupNewCard.querySelector('.popup__form').reset();
-    clearValidation(popupNewCard)
+    clearValidation(popupNewCard, validationConfig)
     openPopup(popupNewCard)
 })
 
 //функция для обновления картинки в профили 
 editProfileImage.addEventListener('click', function () {
     popupNewAvatar.querySelector('.popup__form').reset();
-    clearValidation(popupNewAvatar)
+    clearValidation(popupNewAvatar, validationConfig)
     openPopup(popupNewAvatar)
 })
 
 // вешаем обрабочики клика на все попапы для закрытия 
 const popups = document.querySelectorAll('.popup');
-enableValidation();
 
 popups.forEach((popup) => {
     const closeButton = popup.querySelector(".popup__close")
@@ -120,8 +119,7 @@ formNewPlace.addEventListener('submit', function (evt) {
                     createCard(
                         formNewPlaceElements.placeName.value,
                         formNewPlaceElements.link.value,
-                        openPopup,
-                        closePopup,
+                        deleteCard,
                         openImage,
                         myID,
                         result.owner._id,
@@ -173,6 +171,25 @@ formNewAvatar.addEventListener('submit', function (evt) {
     }
 })
 
+//удаление карточек через форму подтверждения
+const popupDeleteCard = document.querySelector(".popup_type_delete_card")
+const buttonDeleteCard = popupDeleteCard.querySelector(".popup__button")
+function deleteCard(cardElement, deleteMyCard, cardId) {
+    openPopup(popupDeleteCard)
+    buttonDeleteCard.onclick = () => {
+        deleteMyCard(cardId)
+            .then(() => {
+                cardElement.remove()
+                closePopup(popupDeleteCard)
+            })
+            .catch((err) => {
+                console.error("Ошибка при загрузке данных:", err);
+                alert("Ошибка: потеряли связь с сервером. Попробуйте позже.");
+            });
+
+    }
+}
+
 //ждём ответа от сервера об информации о пользователе и о всех карточках
 Promise.all([userInformation(), loadingCards()])
     .then(([user, cards]) => {
@@ -185,8 +202,7 @@ Promise.all([userInformation(), loadingCards()])
                 createCard(
                     item.name,
                     item.link,
-                    openPopup,
-                    closePopup,
+                    deleteCard,
                     openImage,
                     myID,
                     item.owner._id,
@@ -202,3 +218,12 @@ Promise.all([userInformation(), loadingCards()])
         alert("Ошибка: потеряли связь с сервером. Попробуйте позже.");
     });
 
+//Вызов валидации
+const validationConfig = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'form__input-error_active'
+};
+enableValidation(validationConfig);

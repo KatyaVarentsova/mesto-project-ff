@@ -2,7 +2,7 @@ export { createCard }
 const cardTemplate = document.querySelector('#card-template').content;
 
 
-function createCard(cityName, cityLink, openPopup, closePopup, openImage, myID, ownerID, deleteMyCard, cardId, likes, putLike, deleteLike) {
+function createCard(cityName, cityLink, deleteCard, openImage, myID, ownerID, deleteMyCard, cardId, likes, putLike, deleteLike) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
 
@@ -15,7 +15,7 @@ function createCard(cityName, cityLink, openPopup, closePopup, openImage, myID, 
     deleteButton.style.display = "none"
   } else {
     deleteButton.addEventListener('click', function () {
-      deleteCard(openPopup, closePopup, cardElement, deleteMyCard, cardId)
+      deleteCard(cardElement, deleteMyCard, cardId)
     });
   }
 
@@ -40,44 +40,27 @@ function createCard(cityName, cityLink, openPopup, closePopup, openImage, myID, 
   return cardElement;
 }
 
-
-const popupDeleteCard = document.querySelector(".popup_type_delete_card")
-const buttonDeleteCard = popupDeleteCard.querySelector(".popup__button")
-function deleteCard(openPopup, closePopup, cardElement, deleteMyCard, cardId) {
-  console.log('nnn')
-  openPopup(popupDeleteCard)
-  buttonDeleteCard.addEventListener('click', function () {
-    cardElement.remove()
-    deleteMyCard(cardId)
-      .catch((err) => {
-        console.error("Ошибка при загрузке данных:", err);
-        alert("Ошибка: потеряли связь с сервером. Попробуйте позже.");
-      });
-      closePopup(popupDeleteCard)
-  })
-}
-
 function switchLike(likeButton, quantityLikes, putLike, deleteLike, cardId) {
   if (likeButton.classList.contains('card__like-button_is-active')) {
     deleteLike(cardId)
       .then(({ likes }) => {
         quantityLikes.textContent = likes.length
+        likeButton.classList.remove('card__like-button_is-active')
       })
       .catch((err) => {
         console.error("Ошибка при загрузке данных:", err);
         alert("Ошибка: потеряли связь с сервером. Попробуйте позже.");
       });
-    likeButton.classList.remove('card__like-button_is-active')
   } else {
     putLike(cardId)
       .then(({ likes }) => {
         quantityLikes.textContent = likes.length
+        likeButton.classList.add('card__like-button_is-active')
       })
       .catch((err) => {
         console.error("Ошибка при загрузке данных:", err);
         alert("Ошибка: потеряли связь с сервером. Попробуйте позже.");
       });
-    likeButton.classList.add('card__like-button_is-active')
   }
 
 }

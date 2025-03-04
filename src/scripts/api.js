@@ -1,7 +1,7 @@
 const config = {
     baseUrl: 'https://nomoreparties.co/v1/cohort-mag-4',
     headers: {
-        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
+        authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
         'Content-Type': 'application/json'
     }
 }
@@ -31,7 +31,7 @@ function userInformation() {
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'GET',
         headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b'
+            authorization: config.headers.authorization
         }
     })
         .then(res => gettingResponse(res))
@@ -42,7 +42,7 @@ function loadingCards() {
     return fetch(`${config.baseUrl}/cards`, {
         method: 'GET',
         headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b'
+            authorization: config.headers.authorization
         }
     })
         .then(res => gettingResponse(res))
@@ -52,10 +52,7 @@ function loadingCards() {
 function editingProfile(name, about) {
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
-        headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-            'Content-Type': 'application/json'
-        },
+        headers: config.headers,
         body: JSON.stringify({
             name: name,
             about: about
@@ -72,10 +69,7 @@ function addingNewCards(name, link) {
         } else {
             return fetch(`${config.baseUrl}/cards`, {
                 method: 'POST',
-                headers: {
-                    authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-                    'Content-Type': 'application/json'
-                },
+                headers: config.headers,
                 body: JSON.stringify({
                     name: name,
                     link: link
@@ -90,10 +84,7 @@ function addingNewCards(name, link) {
 function deleteMyCard(cardId) {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
-        headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-            'Content-Type': 'application/json'
-        }
+        headers: config.headers
     })
         .then(res => gettingResponse(res))
 }
@@ -102,10 +93,7 @@ function deleteMyCard(cardId) {
 function putLike(cardId) {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
-        headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-            'Content-Type': 'application/json'
-        }
+        headers: config.headers
     })
         .then(res => gettingResponse(res))
 }
@@ -114,10 +102,7 @@ function putLike(cardId) {
 function deleteLike(cardId) {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'DELETE',
-        headers: {
-            authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-            'Content-Type': 'application/json'
-        }
+        headers: config.headers
     })
         .then(res => gettingResponse(res))
 }
@@ -130,10 +115,7 @@ function changeAvatar(avatar) {
         } else {
             return fetch(`${config.baseUrl}/users/me/avatar`, {
                 method: 'PATCH',
-                headers: {
-                    authorization: 'c310cc05-9bfe-4706-9faa-1ec28ad96a9b',
-                    'Content-Type': 'application/json'
-                },
+                headers: config.headers,
                 body: JSON.stringify({
                     avatar: avatar
                 })

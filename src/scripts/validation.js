@@ -1,30 +1,30 @@
 export { enableValidation, clearValidation }
 
 //показывает ошибку ввода
-const showInputError = (element, span, errorMessage) => {
-    element.classList.add('popup__input-type-erorr');
+const showInputError = (element, span, errorMessage, validationConfig) => {
+    element.classList.add(validationConfig.inputErrorClass);
     span.textContent = errorMessage;
-    span.classList.add('form__input-error_active');
+    span.classList.add(validationConfig.errorClass);
 };
 
 //скрывает ошибку ввода
-const hideInputError = (element, span) => {
-    element.classList.remove('popup__input-type-erorr');
-    span.classList.remove('form__input-error_active');
+const hideInputError = (element, span, validationConfig) => {
+    element.classList.remove(validationConfig.inputErrorClass);
+    span.classList.remove(validationConfig.errorClass);
 }
 
-const clearValidation = (popup) => {
-    const inputs = popup.querySelectorAll(".popup__input")
+const clearValidation = (popup, validationConfig) => {
+    const inputs = popup.querySelectorAll(validationConfig.inputSelector)
     inputs.forEach((input) => {
         const spanErorr = popup.querySelector(`.${input.id}-error`);
-        hideInputError(input, spanErorr)
+        hideInputError(input, spanErorr, validationConfig)
     })
-    toggleButtonState(Array.from(inputs), popup.querySelector('.popup__button'))
+    toggleButtonState(Array.from(inputs), popup.querySelector(validationConfig.submitButtonSelector))
     
 }
 
 // проверка валидности 
-const isValid = (inputElement, spanErorr) => {
+const isValid = (inputElement, spanErorr, validationConfig) => {
     if (inputElement.validity.patternMismatch) {
         inputElement.setCustomValidity(inputElement.dataset.errorMessage);
     } else {
@@ -32,9 +32,9 @@ const isValid = (inputElement, spanErorr) => {
     }
 
     if (!inputElement.validity.valid) {
-        showInputError(inputElement, spanErorr, inputElement.validationMessage)
+        showInputError(inputElement, spanErorr, inputElement.validationMessage, validationConfig)
     } else {
-        hideInputError(inputElement, spanErorr)
+        hideInputError(inputElement, spanErorr, validationConfig)
     }
 }
 
@@ -55,23 +55,23 @@ const toggleButtonState = (inputList, buttonElement) => {
 }
 
 //устанавливает прослушиватели событий 
-const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button');
+const setEventListeners = (formElement, validationConfig) => {
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
 
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function(){
             const spanErorr = formElement.querySelector(`.${inputElement.id}-error`);
-            isValid(inputElement, spanErorr)
+            isValid(inputElement, spanErorr, validationConfig)
             toggleButtonState(inputList, buttonElement);
         });
     })
   };
 
 //включает проверку
-const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
+const enableValidation = (validationConfig) => {
+    const formList = Array.from(document.querySelectorAll(validationConfig.formSelector));
     formList.forEach((form) => {
-        setEventListeners(form)
+        setEventListeners(form, validationConfig)
     });
 };
