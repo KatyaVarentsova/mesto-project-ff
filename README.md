@@ -1,6 +1,6 @@
 # Проектная работа Mesto
-[Ссылка на репозиторий]https://github.com/KatyaVarentsova/mesto-project-ff
-[Ссылка на опубликованный сайт]https://katyavarentsova.github.io/mesto-project-ff/
+[Ссылка на репозиторий](https://github.com/KatyaVarentsova/mesto-project-ff)
+[Ссылка на опубликованный сайт](https://katyavarentsova.github.io/mesto-project-ff/)
 
 ### Инструкция для разработчика
 - Установить Node.js версию 20+
