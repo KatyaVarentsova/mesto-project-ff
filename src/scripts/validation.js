@@ -18,6 +18,7 @@ const clearValidation = (popup, validationConfig) => {
     inputs.forEach((input) => {
         const spanErorr = popup.querySelector(`.${input.id}-error`);
         hideInputError(input, spanErorr, validationConfig)
+        input.setCustomValidity("");
     })
     toggleButtonState(Array.from(inputs), popup.querySelector(validationConfig.submitButtonSelector))
     
